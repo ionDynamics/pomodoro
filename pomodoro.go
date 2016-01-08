@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 	"time"
 )
 
@@ -9,6 +11,16 @@ func main() {
 	prod := 25 * time.Minute
 	short := 3 * time.Minute
 	long := 15 * time.Minute
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for {
+			<-c
+			fmt.Print("\r\t\t\t\t\t\r")
+			os.Exit(0)
+		}
+	}()
 
 	for {
 		for i := 0; i < 4; i++ {
